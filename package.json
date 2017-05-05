@@ -20,5 +20,11 @@
   "bugs": {
     "url": "https://github.com/palulabs/loog/issues"
   },
-  "homepage": "https://github.com/palulabs/loog#readme"
+  "homepage": "https://github.com/palulabs/loog#readme",
+  "dependencies": {
+    "chalk": "^1.1.3"
+  },
+  "devDependencies": {
+    "boxen": "^1.0.0"
+  }
 }
