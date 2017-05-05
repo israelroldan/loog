@@ -14,10 +14,10 @@ const textPrefixes = {
 
 const emojiPrefixes = {
     error: '❌',
-    warn: '💡',
-    warning: "💡",
+    warn: '〽️',
+    warning: "〽️",
     http: '🌐',
-    info: '📢',
+    info: '➡️',
     verbose: '🎤',
     debug: '🔬',
     silly: '🙃',
