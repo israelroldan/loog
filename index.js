@@ -37,7 +37,7 @@ const defaultColors = {
 };
 
 const defaultCfg = {
-    prefixStyle: 'emoji',
+    prefixStyle: 'text',
     color: true,
     colorStyle: {}
 };

@@ -15,7 +15,7 @@ header = (text) => {
     console.log(boxen(text, {margin: {top: 1}, style: 'double'}))
 }
 
-header("Default settings (prefixStyle: 'emoji')");
+header("Default settings\n\n    let loog = require('loog');");
 [ 'error',
   'warn',
   'warning',
@@ -25,12 +25,12 @@ header("Default settings (prefixStyle: 'emoji')");
   'debug',
   'silly',
   'log' ].forEach(level => {
-      log[level](`log.${level}`)
+      log[level](`loog.${level}`)
   });
 
-header("Text mode (prefixStyle: 'text')");
+header("Emoji mode\n\n    let loog = require('loog')({\n        prefixStyle: 'emoji'\n    });");
 log = log({
-    prefixStyle: 'text'
+    prefixStyle: 'emoji'
 });
 
 [ 'error',
@@ -42,10 +42,19 @@ log = log({
   'debug',
   'silly',
   'log' ].forEach(level => {
-      log[level](`log.${level}`)
+      log[level](`loog.${level}`)
   });
-
-header("No prefix, colorized (prefixStyle: 'none')");
+console.log("");
+console.log("");
+console.log("");
+console.log("");
+console.log("");
+console.log("");
+console.log("");
+console.log("");
+console.log("");
+console.log("");
+header("No prefix, colorized\n\n    let loog = require('loog')({\n        prefixStyle: 'none'\n    });");
 log = log({
     prefixStyle: 'none'
 });
@@ -59,10 +68,10 @@ log = log({
   'debug',
   'silly',
   'log' ].forEach(level => {
-      log[level](`log.${level}`)
+      log[level](`loog.${level}`)
   });
 
-header("No prefix, no colors (prefixStyle: 'none', color: false)");
+header("No prefix, no colors\n\n    let loog = require('loog')({\n        prefixStyle: 'emoji'\n        color: false\n    });");
 log = log({
     prefixStyle: 'none',
     color: false
@@ -77,5 +86,5 @@ log = log({
   'debug',
   'silly',
   'log' ].forEach(level => {
-      log[level](`log.${level}`)
+      log[level](`loog.${level}`)
   });
