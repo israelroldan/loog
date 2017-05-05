@@ -32,7 +32,7 @@ const defaultColors = {
     info: chalk.green,
     verbose: chalk.blue,
     debug: chalk.dim,
-    silly: chalk.inverse,
+    silly: chalk.white,
     log: t => t
 };
 

@@ -1,5 +1,5 @@
 let boxen = require('boxen');
-let log = require('.');
+let chalk = require('chalk');
 
 console.log(`
    _                 
@@ -11,78 +11,57 @@ console.log(`
   1 extra letter  \\| 
   `)
 
-header = (text) => {
+let header = (text) => {
     console.log(boxen(text, {margin: {top: 1}, style: 'double'}))
 }
 
-header("Default settings\n\n    let loog = require('loog');");
-[ 'error',
-  'warn',
-  'warning',
-  'http',
-  'info',
-  'verbose',
-  'debug',
-  'silly',
-  'log' ].forEach(level => {
-      log[level](`loog.${level}`)
-  });
+let showcase = (title, cfg) => {
+    header(title);
+    [ 'error',
+        'warn',
+        'warning',
+        'http',
+        'info',
+        'verbose',
+        'debug',
+        'silly',
+        'log' ].forEach(level => {
+            require('.')(cfg)[level](`loog.${level}`)
+        });
+}
 
-header("Emoji mode\n\n    let loog = require('loog')({\n        prefixStyle: 'emoji'\n    });");
-log = log({
+showcase("Default settings\n\n    let loog = require('loog');",{});
+
+showcase("Emoji mode\n\n    let loog = require('loog')({\n        prefixStyle: 'emoji'\n    });", {
     prefixStyle: 'emoji'
 });
 
-[ 'error',
-  'warn',
-  'warning',
-  'http',
-  'info',
-  'verbose',
-  'debug',
-  'silly',
-  'log' ].forEach(level => {
-      log[level](`loog.${level}`)
-  });
-
-header("No prefix, colorized\n\n    let loog = require('loog')({\n        prefixStyle: 'none'\n    });");
-log = log({
+showcase("No prefix, colorized\n\n    let loog = require('loog')({\n        prefixStyle: 'none'\n    });", {
     prefixStyle: 'none'
 });
 
-[ 'error',
-  'warn',
-  'warning',
-  'http',
-  'info',
-  'verbose',
-  'debug',
-  'silly',
-  'log' ].forEach(level => {
-      log[level](`loog.${level}`)
-  });
+showcase("Custom prefixes\n\n    let loog = require('loog')({\n        prefixStyle: 'custom',\n        prefixes: {\n            error: chalk.red.bold('[ERR]'),\n            //...\n        }\n    });", {
+    prefixStyle: 'custom',
+    prefixes: {
+        'error': chalk.red.bold('[ERR]'),
+        'warn': chalk.yellow.bold('[WRN]'),
+        'warning': chalk.yellow.bold('[WRN]'),
+        'http': chalk.cyan.bold('[NET]'),
+        'info': chalk.green.bold('[INF]'),
+        'verbose': chalk.magenta.bold('[VRB]'),
+        'debug': chalk.gray.bold('[DBG]'),
+        'silly': chalk.white.bold('[LOL]'),
+        'log': ''
+    }
+});
 
-header("No prefix, no colors\n\n    let loog = require('loog')({\n        prefixStyle: 'emoji'\n        color: false\n    });");
-log = log({
+showcase("No prefix, no colors\n\n    let loog = require('loog')({\n        prefixStyle: 'emoji'\n        color: false\n    });", {
     prefixStyle: 'none',
     color: false
 });
 
-[ 'error',
-  'warn',
-  'warning',
-  'http',
-  'info',
-  'verbose',
-  'debug',
-  'silly',
-  'log' ].forEach(level => {
-      log[level](`loog.${level}`)
-  });
-
 header("Indentation example\n\n    loog.indent();\n    //statements, more indent/outdent\n    loog.outdent();");
-log = log();
-
+let log = require('.');
 log.info("Statement at the root level");
 log.indent();
 log.info("First level");
