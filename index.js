@@ -13,14 +13,14 @@ const textPrefixes = {
 };
 
 const emojiPrefixes = {
-    error: '❌',
-    warn: '〽️',
-    warning: "〽️",
-    http: '🌐',
-    info: '➡️',
-    verbose: '🎤',
-    debug: '🔬',
-    silly: '🙃',
+    error: '❌ ',
+    warn: '〽️ ',
+    warning: "〽️ ",
+    http: '🌐 ',
+    info: '➡️ ',
+    verbose: '🎤 ',
+    debug: '🔬 ',
+    silly: '🙃 ',
     log: ''
 };
 
