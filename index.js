@@ -44,6 +44,7 @@ const defaultCfg = {
 
 class Log {
     constructor (cfg) { 
+        this._indentation = 0;
         this.cfg = Object.assign({}, cfg);
         if (this.cfg.prefixStyle === 'text') {
             this.cfg.prefixes = textPrefixes;
@@ -66,12 +67,21 @@ class Log {
             if (me.cfg.prefixes[level]) {
                 args.unshift(me.cfg.prefixes[level]);
             }
+            args.unshift(" ".repeat(this._indentation));
             if (me.cfg.colorStyle[level]) {
                 console.log(me.cfg.colorStyle[level](args.join(' ')));
             } else {
                 console.log.apply(null, args);
             }
         }
+    }
+
+    indent () {
+        this._indentation++;
+    }
+
+    outdent () {
+        this._indentation--;
     }
 }
 
@@ -92,8 +102,10 @@ function wrap () {
         _instance = new Log(Object.assign({}, defaultCfg, cfg));
         return wrap();
     }
-    Object.keys(textPrefixes).map((level)=> {
-        ex[level] = _instance[level];
+    Object.getOwnPropertyNames(Log.prototype).forEach((method)=> {
+        if (method !== "constructor" && method.charAt(0) !== "_") {
+            ex[method] = _instance[method].bind(_instance);
+        }
     });
     return ex;
 }

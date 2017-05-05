@@ -44,16 +44,7 @@ log = log({
   'log' ].forEach(level => {
       log[level](`loog.${level}`)
   });
-console.log("");
-console.log("");
-console.log("");
-console.log("");
-console.log("");
-console.log("");
-console.log("");
-console.log("");
-console.log("");
-console.log("");
+
 header("No prefix, colorized\n\n    let loog = require('loog')({\n        prefixStyle: 'none'\n    });");
 log = log({
     prefixStyle: 'none'
@@ -88,3 +79,17 @@ log = log({
   'log' ].forEach(level => {
       log[level](`loog.${level}`)
   });
+
+header("Indentation example\n\n    loog.indent();\n    //statements, more indent/outdent\n    loog.outdent();");
+log = log();
+
+log.info("Statement at the root level");
+log.indent();
+log.info("First level");
+log.indent();
+log.info("Second level");
+log.debug("Second level");
+log.outdent();
+log.error("First level");
+log.outdent();
+log.warning("Root level");
