@@ -13,7 +13,7 @@ const textPrefixes = {
     };
     
 const asciiPrefixes = {
-    error: chalk.red(process.platform === 'win32' ? '×' : '✖'),
+    error: chalk.red(process.platform === 'win32' ? '►' : '✖'),
     warn: chalk.yellow(process.platform === 'win32' ? '‼' : '⚠'),
     warning: chalk.yellow(process.platform === 'win32' ? '‼' : '⚠'),
     http: chalk.cyan(process.platform === 'win32' ? '≡' : '☷'),
