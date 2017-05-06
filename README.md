@@ -9,3 +9,11 @@
 
     npm install --save loog
 
+## License
+
+MIT
+
+## Acknowledgments
+
+The `loog` ASCII logo uses the [FIGlet](http://www.figlet.org/) font: `script`, created by [Glenn Chappell](https://github.com/ggchappell).
+

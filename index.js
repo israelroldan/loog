@@ -1,14 +1,26 @@
 const chalk = require('chalk');
 
 const textPrefixes = {
+        'error': chalk.red.bold('[ERR]'),
+        'warn': chalk.yellow.bold('[WRN]'),
+        'warning': chalk.yellow.bold('[WRN]'),
+        'http': chalk.cyan.bold('[NET]'),
+        'info': chalk.green.bold('[INF]'),
+        'verbose': chalk.blue.bold('[VRB]'),
+        'debug': chalk.gray.bold('[DBG]'),
+        'silly': chalk.white.bold('[LOL]'),
+        'log': ''
+    };
+    
+const asciiPrefixes = {
     error: chalk.red(process.platform === 'win32' ? '×' : '✖'),
     warn: chalk.yellow(process.platform === 'win32' ? '‼' : '⚠'),
     warning: chalk.yellow(process.platform === 'win32' ? '‼' : '⚠'),
     http: chalk.cyan(process.platform === 'win32' ? '≡' : '☷'),
     info: chalk.green(process.platform === 'win32' ? 'i' : 'ℹ'),
     verbose: chalk.blue(process.platform === 'win32' ? 'i' : 'ℹ'),
-    debug: chalk.dim(process.platform === 'win32' ? 'i': 'ℹ'),
-    silly: chalk.inverse(process.platform === 'win32' ? '☺' : '☺'),
+    debug: chalk.gray(process.platform === 'win32' ? 'i': 'ℹ'),
+    silly: chalk.white(process.platform === 'win32' ? '☺' : '☺'),
     log: ''
 };
 
@@ -30,8 +42,8 @@ const defaultColors = {
     warning: chalk.yellow,
     http: chalk.cyan,
     info: chalk.green,
-    verbose: chalk.blue,
-    debug: chalk.dim,
+    verbose: chalk.gray,
+    debug: chalk.blue,
     silly: chalk.white,
     log: t => t
 };
@@ -50,6 +62,8 @@ class Log {
             this.cfg.prefixes = textPrefixes;
         } else if (this.cfg.prefixStyle === 'emoji') {
             this.cfg.prefixes = emojiPrefixes;
+        } else if (this.cfg.prefixStyle === 'ascii') {
+            this.cfg.prefixes = asciiPrefixes;
         } else if (this.cfg.prefixStyle === 'none') {
             this.cfg.prefixes = {};
             if (!this.cfg.color) {
