@@ -81,11 +81,13 @@ class Log {
             if (me.cfg.prefixes[level]) {
                 args.unshift(me.cfg.prefixes[level]);
             }
-            args.unshift(" ".repeat(this._indentation));
+            if (this._indentation > 0) {
+                args.unshift(" ".repeat(this._indentation));
+            }
             if (me.cfg.colorStyle[level]) {
                 console.log(me.cfg.colorStyle[level](args.join(' ')));
             } else {
-                console.log.apply(null, args);
+                console.log(args.join(' '));
             }
         }
     }

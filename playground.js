@@ -35,13 +35,13 @@ showcase("Default settings (text mode)\n\n    let loog = require('loog');  ",{})
 showcase("Emoji mode\n\n    let loog = require('loog')({  \n        prefixStyle: 'emoji'\n    });", {
     prefixStyle: 'emoji'
 });
+/*console.log("")
 console.log("")
 console.log("")
 console.log("")
 console.log("")
 console.log("")
-console.log("")
-console.log("")
+console.log("")*/
 showcase("Ascii mode\n\n    let loog = require('loog')({  \n        prefixStyle: 'emoji'\n    });", {
     prefixStyle: 'ascii'
 });
@@ -49,11 +49,11 @@ showcase("Ascii mode\n\n    let loog = require('loog')({  \n        prefixStyle:
 showcase("No prefix, colorized\n\n    let loog = require('loog')({  \n        prefixStyle: 'none'\n    });", {
     prefixStyle: 'none'
 });
+/*console.log("")
 console.log("")
 console.log("")
 console.log("")
-console.log("")
-console.log("")
+console.log("")*/
 showcase("No prefix, no colors\n\n    let loog = require('loog')({  \n        prefixStyle: 'emoji'\n        color: false\n    });", {
     prefixStyle: 'none',
     color: false
@@ -71,10 +71,10 @@ log.outdent();
 log.error("First level");
 log.outdent();
 log.warning("Root level");
+/*console.log("")
 console.log("")
 console.log("")
 console.log("")
 console.log("")
 console.log("")
-console.log("")
-console.log("")
+console.log("")*/
