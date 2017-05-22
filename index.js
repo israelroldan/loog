@@ -1,16 +1,16 @@
 const chalk = require('chalk');
 
 const textPrefixes = {
-        'error': chalk.red.bold('[ERR]'),
-        'warn': chalk.yellow.bold('[WRN]'),
-        'warning': chalk.yellow.bold('[WRN]'),
-        'http': chalk.cyan.bold('[NET]'),
-        'info': chalk.green.bold('[INF]'),
-        'verbose': chalk.blue.bold('[VRB]'),
-        'debug': chalk.gray.bold('[DBG]'),
-        'silly': chalk.white.bold('[LOL]'),
-        'log': ''
-    };
+    'error': chalk.red.bold('[ERR]'),
+    'warn': chalk.yellow.bold('[WRN]'),
+    'warning': chalk.yellow.bold('[WRN]'),
+    'http': chalk.cyan.bold('[NET]'),
+    'info': chalk.green.bold('[INF]'),
+    'verbose': chalk.blue.bold('[VRB]'),
+    'debug': chalk.gray.bold('[DBG]'),
+    'silly': chalk.white.bold('[LOL]'),
+    'log': ''
+};
     
 const asciiPrefixes = {
     error: chalk.red(process.platform === 'win32' ? '►' : '✖'),
@@ -51,7 +51,8 @@ const defaultColors = {
 const defaultCfg = {
     prefixStyle: 'text',
     color: true,
-    colorStyle: {}
+    colorStyle: {},
+    logLevel: 'info'
 };
 
 class Log {
@@ -72,22 +73,25 @@ class Log {
                 this.cfg.colorStyle = defaultColors;
             }
         }
+        this.setLogLevel(cfg.logLevel);
     }
 
     _getLogFn(level) {
         let me = this;
-        return function () {
-            let args = Array.prototype.slice.call(arguments);
-            if (me.cfg.prefixes[level]) {
-                args.unshift(me.cfg.prefixes[level]);
-            }
-            if (this._indentation > 0) {
-                args.unshift(" ".repeat(this._indentation));
-            }
-            if (me.cfg.colorStyle[level]) {
-                console.log(me.cfg.colorStyle[level](args.join(' ')));
-            } else {
-                console.log(args.join(' '));
+        return function logFn () {
+            if (logFn.enable) {
+                let args = Array.prototype.slice.call(arguments);
+                if (me.cfg.prefixes[level]) {
+                    args.unshift(me.cfg.prefixes[level]);
+                }
+                if (this._indentation > 0) {
+                    args.unshift(" ".repeat(this._indentation));
+                }
+                if (me.cfg.colorStyle[level]) {
+                    console.log(me.cfg.colorStyle[level](args.join(' ')));
+                } else {
+                    console.log(args.join(' '));
+                }
             }
         }
     }
@@ -98,6 +102,37 @@ class Log {
 
     outdent () {
         this._indentation--;
+    }
+
+    mute () {
+        this._mute++;
+    }
+
+    unmute () {
+        this._mute--;
+    }
+
+    setLogLevel(newLevel) {
+        let me = this;
+        switch (newLevel) {
+            case "silly":
+                me.silly.enable = true;
+            case "debug":
+                me.debug.enable = true;
+            case "verbose":
+                me.http.enable = true;
+                me.verbose.enable = true;
+            case "info":
+                me.info.enable = true;
+            case "quiet":
+                me.error.enable = true;                
+                me.warn.enable = true;
+                me.warning.eable = true;
+                break;
+            case "silent":
+                me.mute();
+                break;
+        }
     }
 }
 
@@ -126,4 +161,4 @@ function wrap () {
     return ex;
 }
 
-module.exports =wrap();
+module.exports = wrap();
