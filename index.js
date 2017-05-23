@@ -121,11 +121,11 @@ class Log {
     }
 
     mute () {
-        this._mute++;
+        this._mute = true;
     }
 
     unmute () {
-        this._mute--;
+        this._mute = false;
     }
 
     setLogLevel(newLevel) {
