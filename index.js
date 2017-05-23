@@ -81,7 +81,7 @@ class Log {
     _getLogFn(level) {
         let me = this;
         return function logFn () {
-            if (logFn.enable) {
+            if (logFn.enable && !me._mute) {
                 let args = Array.prototype.slice.call(arguments);
                 if (me.cfg.prefixes[level]) {
                     args.unshift(me.cfg.prefixes[level]);
