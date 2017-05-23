@@ -146,7 +146,8 @@ class Log {
             case "quiet":
                 me.error.enable = true;                
                 me.warn.enable = true;
-                me.warning.eable = true;
+                me.warning.enable = true;
+                me.log.enable = true;
                 break;
             case "silent":
                 me.mute();
