@@ -103,7 +103,21 @@ class Log {
     }
 
     outdent () {
-        this._indentation--;
+        if (this._indentation > 0) {
+            this._indentation--;
+        }
+    }
+
+    pauseIndentation () {
+        this._indentWas = this._indentation;
+    }
+
+    resumeIndentation () {
+        this._indentation = this._indentWas;
+    }
+
+    resetIndentation () {
+        this._indentation = 0;
     }
 
     mute () {
