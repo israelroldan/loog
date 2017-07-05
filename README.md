@@ -3,7 +3,7 @@
 
 `loog` provides a simple but very complete logger interface.
 
-![screenshot](./screenshot.png)
+![screenshot](https://github.com/israelroldan/loog/raw/master/screenshot.png)
 
 ## How to install
 

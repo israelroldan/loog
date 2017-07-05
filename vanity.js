@@ -16,16 +16,20 @@ let header = (text) => {
 
 let showcase = (title, cfg) => {
     header(title);
+    let log = require('.')(cfg);
+    log.setLogLevel('all');
     [ 'error',
         'warn',
         'warning',
-        'http',
         'info',
+        'notice',
+        'http',
+        'timing',
         'verbose',
         'debug',
-        'silly',
+        'silly', 
         'log' ].forEach(level => {
-            require('.')(cfg)[level](`loog.${level}`)
+            log[level](`loog.${level}`)
         });
 }
 
@@ -60,6 +64,7 @@ showcase("No prefix, no colors\n\n    let loog = require('loog')({  \n        pr
 
 header("Indentation example\n\n    loog.indent();\n    //statements, more indent/outdent  \n    loog.outdent();");
 let log = require('.');
+log.setLogLevel('all');
 log.info("Statement at the root level");
 log.indent();
 log.info("First level");
