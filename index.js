@@ -61,7 +61,7 @@ const defaultCfg = {
     prefixStyle: 'text',
     color: true,
     colorStyle: {},
-    logLevel: 'info'
+    logLevel: process.env.npm_config_loglevel || 'info'
 };
 
 class Log {
