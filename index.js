@@ -1,11 +1,17 @@
 const chalk = require('chalk');
 
 const logLevels = [
+    'all',
     'silly',
     'debug',
     'verbose',
+    'timing',
+    'http',
+    'notice',
     'info',
+    'warn',
     'quiet',
+    'error',
     'silent'
 ];
 
@@ -45,46 +51,50 @@ const emojiPrefixes = {
     log: ''
 };
 
-const defaultColors = {
-    error: chalk.red,
-    warn: chalk.yellow,
-    warning: chalk.yellow,
-    http: chalk.cyan,
-    info: chalk.green,
-    verbose: chalk.gray,
-    debug: chalk.blue,
-    silly: chalk.white,
-    log: t => t
-};
-
-const defaultCfg = {
-    prefixStyle: 'text',
-    color: true,
-    colorStyle: {},
-    logLevel: process.env.npm_config_loglevel || 'info'
-};
-
-class Log {
-    constructor (cfg) { 
+/** Loog: A simple logger with one extra character */
+class Loog {
+    /**
+     * Create a Loog instance.
+     * @param {Object} config - The initial configuration
+     * @param {string} [config.prefixStyle=text] - The prefix style, one of ['text', 'emoji', 'ascii', 'none'].
+     * @param {string} [config.logLevel=info] - The log level, one of ['silly', 'debug', 'info', 'warn', 'error', 'silent'].
+     */
+    constructor (config) { 
         this._indentation = 0;
-        this.cfg = Object.assign({}, cfg);
-        if (this.cfg.prefixStyle === 'text') {
-            this.cfg.prefixes = textPrefixes;
-        } else if (this.cfg.prefixStyle === 'emoji') {
-            this.cfg.prefixes = emojiPrefixes;
-        } else if (this.cfg.prefixStyle === 'ascii') {
-            this.cfg.prefixes = asciiPrefixes;
-        } else if (this.cfg.prefixStyle === 'none') {
-            this.cfg.prefixes = {};
-            if (!this.cfg.color) {
-                this.cfg.colorStyle = {};
-            } else {
-                this.cfg.colorStyle = defaultColors;
-            }
+        this.cfg = Object.assign({}, config);
+        switch (this.cfg.prefixStyle) {
+            case "text":
+                this.cfg.prefixes = textPrefixes;
+                break;
+            case "emoji":
+                this.cfg.prefixes = emojiPrefixes;
+                break;
+            case "ascii":
+                this.cfg.prefixes = asciiPrefixes;
+                break;
+            case "none":
+                this.cfg.prefixes = {};
+                if (!this.cfg.color) {
+                    this.cfg.colorStyle = {};
+                } else {
+                    this.cfg.colorStyle = {
+                        error: chalk.red,
+                        warn: chalk.yellow,
+                        warning: chalk.yellow,
+                        http: chalk.cyan,
+                        info: chalk.green,
+                        verbose: chalk.gray,
+                        debug: chalk.blue,
+                        silly: chalk.white,
+                        log: t => t
+                    };
+                }
+                break;
         }
-        this.setLogLevel(cfg.logLevel);
+        this.setLogLevel(config.logLevel);
     }
 
+    /** @private */
     _getLogFn(level) {
         let me = this;
         return function logFn () {
@@ -105,40 +115,87 @@ class Log {
         }
     }
 
+    /**
+     * Indent subsequent log statements one level deeper.
+     * @see {@link Loog#outdent}
+     * @see {@link Loog#pauseIndentation}
+     * @see {@link Loog#resumeIndentation}
+     */
     indent () {
         this._indentation++;
     }
 
+    /**
+     * Outdent subsequent log statements one level.
+     * @see {@link Loog#indent}
+     * @see {@link Loog#pauseIndentation}
+     * @see {@link Loog#resumeIndentation}
+     * @see {@link Loog#resetIndentation}
+     */
     outdent () {
         if (this._indentation > 0) {
             this._indentation--;
         }
     }
 
+    /**
+     * Temporarily pause indentation, subsequent statements will be logged at the root level.
+     * Use `resumeIndentation()` to recover the indent level.
+     * @see {@link Loog#resumeIndentation}
+     * @see {@link Loog#indent}
+     * @see {@link Loog#outdent}
+     * @see {@link Loog#resetIndentation} 
+     */
     pauseIndentation () {
         this._indentWas = this._indentation;
     }
 
+    /**
+     * Resumes the previously paused indentation.
+     * @see {@link Loog#pauseIndentation}
+     * @see {@link Loog#indent}
+     * @see {@link Loog#outdent}
+     * @see {@link Loog#resetIndentation}
+     */
     resumeIndentation () {
         this._indentation = this._indentWas;
     }
 
+    /**
+     * Resets the indent level to 0.
+     * @see {@link Loog#indent}
+     * @see {@link Loog#outdent}
+     * @see {@link Loog#pauseIndentation}
+     * @see {@link Loog#resumeIndentation}
+     */
     resetIndentation () {
         this._indentation = 0;
     }
 
+    /**
+     * Mutes all subsequent log statements
+     * @see {@link Loog#unmute}
+     */
     mute () {
         this._mute = true;
     }
 
+    /**
+     * Unmutes all subsequent log statements
+     * @see {@link Loog#mute}
+     */
     unmute () {
         this._mute = false;
     }
 
+    /**
+     * Changes the log level for subsequent statements
+     * @param {string} [newLevel=quiet] - The log level to set. One of ['silly', 'debug', 'info', 'warn', 'error', 'silent']
+     */
     setLogLevel(newLevel) {
         let me = this;
-        if (logLevels.indexOf(newLevel) === -1) {
-            newLevel = 'quiet';
+        if (!newLevel || logLevels.indexOf(newLevel) === -1) {
+            newLevel = 'info';
         }
         switch (newLevel) {
             case "all":
@@ -158,7 +215,6 @@ class Log {
                 me.warn.enable = true;
                 me.warning.enable = true;
             case "quiet":
-            case "quiet":
             case "error":
                 me.error.enable = true;                
                 me.log.enable = true;
@@ -171,7 +227,8 @@ class Log {
 }
 
 Object.keys(textPrefixes).forEach(level => {
-    Object.defineProperty(Log.prototype, level, {
+    Object.defineProperty(Loog.prototype, level, {
+        /** @private */
         get: function () { 
             if (!this[`_${level}`]) {
                 this[`_${level}`] = this._getLogFn(level);
@@ -181,13 +238,21 @@ Object.keys(textPrefixes).forEach(level => {
     });
 });
 
-let _instance = new Log(defaultCfg);
+const defaultCfg = {
+    prefixStyle: 'text',
+    color: true,
+    colorStyle: {},
+    logLevel: process.env.npm_config_loglevel || 'info'
+};
+
+let _instance = new Loog(defaultCfg);
+/** @private */
 function wrap () {
     let ex = function reconfigure (cfg) {
-        _instance = new Log(Object.assign({}, defaultCfg, cfg));
+        _instance = new Loog(Object.assign({}, defaultCfg, cfg));
         return wrap();
     }
-    Object.getOwnPropertyNames(Log.prototype).forEach((method)=> {
+    Object.getOwnPropertyNames(Loog.prototype).forEach((method)=> {
         if (method !== "constructor" && method.charAt(0) !== "_") {
             ex[method] = _instance[method].bind(_instance);
         }
