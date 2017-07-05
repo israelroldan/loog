@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="1.5.0"></a>
+# [1.5.0](https://github.com/palulabs/loog/compare/v1.4.0...v1.5.0) (2017-07-05)
+
+
+### Bug Fixes
+
+* **LogLevel:** Reorder log levels to match npm[@5](https://github.com/5) style ([84aded7](https://github.com/palulabs/loog/commit/84aded7))
+
+
+### Features
+
+* **Log level:** Read default log level from `process.env.npm_config_loglevel` if exists ([e57c224](https://github.com/palulabs/loog/commit/e57c224))
+
+
+
 <a name="1.4.0"></a>
 # [1.4.0](https://github.com/palulabs/loog/compare/v1.3.1...v1.4.0) (2017-05-23)
 
