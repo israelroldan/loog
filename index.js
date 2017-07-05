@@ -1,6 +1,13 @@
 const chalk = require('chalk');
 
-const logLevels = ['silly', 'debug', 'verbose', 'info', 'quiet', 'silent'];
+const logLevels = [
+    'silly',
+    'debug',
+    'verbose',
+    'info',
+    'quiet',
+    'silent'
+];
 
 const textPrefixes = {
     'error': chalk.red.bold('[ERR]'),
@@ -131,22 +138,29 @@ class Log {
     setLogLevel(newLevel) {
         let me = this;
         if (logLevels.indexOf(newLevel) === -1) {
-            throw new Error(`Unknown log level '${newLevel}', must be one of: ${logLevels.join(', ')}`)
+            newLevel = 'quiet';
         }
         switch (newLevel) {
+            case "all":
             case "silly":
                 me.silly.enable = true;
             case "debug":
-                me.debug.enable = true;
             case "verbose":
+                me.debug.enable = true;
                 me.http.enable = true;
                 me.verbose.enable = true;
+            case "timing":
+            case "http":
+            case "notice":
             case "info":
                 me.info.enable = true;
-            case "quiet":
-                me.error.enable = true;                
+            case "warn":
                 me.warn.enable = true;
                 me.warning.enable = true;
+            case "quiet":
+            case "quiet":
+            case "error":
+                me.error.enable = true;                
                 me.log.enable = true;
                 break;
             case "silent":
