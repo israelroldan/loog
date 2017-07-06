@@ -1,5 +1,78 @@
+const chalk = require('chalk');
+const isWin = /^win/.test(process.platform);
 
-let _instance = new Loog(defaultCfg);
+const logLevels = [
+    'all',
+    'silly',
+    'debug',
+    'verbose',
+    'timing',
+    'http',
+    'notice',
+    'info',
+    'warn',
+    'quiet',
+    'error',
+    'silent'
+];
+
+const textPrefixes = {
+    error: chalk.red.bold('[ERR]'),
+    warn: chalk.yellow.bold('[WRN]'),
+    warning: chalk.yellow.bold('[WRN]'),
+    http: chalk.cyan.bold('[NET]'),
+    info: chalk.green.bold('[INF]'),
+    notice: chalk.blue.bold('[NOT]'),
+    timing: chalk.blue('[TIM]'),
+    verbose: chalk.blue.bold('[VRB]'),
+    debug: chalk.gray.bold('[DBG]'),
+    silly: chalk.white.bold('[LOL]'),
+    log: ''
+};
+
+const asciiPrefixes = {
+    error: chalk.red.bold(isWin ? '►' : '✖'),
+    warn: chalk.yellow.bold(isWin ? '‼' : '⚠'),
+    warning: chalk.yellow.bold(isWin ? '‼' : '⚠'),
+    http: chalk.cyan.bold(isWin ? '≡' : '☷'),
+    info: chalk.green.bold(isWin ? 'i' : 'ℹ'),
+    notice: chalk.blue.bold(isWin ? 'i' : 'ℵ'),
+    timing: chalk.blue(isWin ? '+' : '◷'),
+    verbose: chalk.blue.bold(isWin ? 'i' : 'ℹ'),
+    debug: chalk.gray.bold(isWin ? 'i': 'ℹ'),
+    silly: chalk.white.bold(isWin ? '☺' : '☺'),
+    log: ''
+};
+
+const emojiPrefixes = {
+    error: '❌ ',
+    warn: '〽️ ',
+    warning: "〽️ ",
+    http: '🌐 ',
+    info: '➡️ ',
+    notice: '❕',
+    timing: '🕒 ',
+    verbose: '🎤 ',
+    debug: '🔬 ',
+    silly: '🙃 ',
+    log: ''
+};
+
+const colorStyles = {
+    error: chalk.red.bold,
+    warn: chalk.yellow.bold,
+    warning: chalk.yellow.bold,
+    http: chalk.cyan.bold,
+    info: chalk.green.bold,
+    notice: chalk.blue.bold,
+    timing: chalk.blue,
+    verbose: chalk.blue.bold,
+    debug: chalk.gray.bold,
+    silly: chalk.white.bold,
+    /** @private */
+    log: t => t
+};
+
 /**
  * This function serves as the loog object and a function to reconfigure it.
  * A quick example:
@@ -30,6 +103,14 @@ function wrap () {
             ex[method] = _instance[method].bind(_instance);
         }
     });
+    ex.$levels = logLevels;
+    ex.$methods = logLevels.filter(l => !~['all','quiet','silent'].indexOf(l));
+    ex.$prefixes = {
+        text: textPrefixes,
+        ascii: asciiPrefixes,
+        emoji: emojiPrefixes
+    };
+    ex.$colors = colorStyles;
     return ex;
 }
 
@@ -52,65 +133,6 @@ function wrap () {
  * See the docs for the global {@link loog} function for more documentation on how to reconfigure loog.
  * @module loog
  */
-const chalk = require('chalk');
-const logLevels = [
-    'all',
-    'silly',
-    'debug',
-    'verbose',
-    'timing',
-    'http',
-    'notice',
-    'info',
-    'warn',
-    'quiet',
-    'error',
-    'silent'
-];
-
-const textPrefixes = {
-    error: chalk.red.bold('[ERR]'),
-    warn: chalk.yellow.bold('[WRN]'),
-    warning: chalk.yellow.bold('[WRN]'),
-    http: chalk.cyan.bold('[NET]'),
-    info: chalk.green.bold('[INF]'),
-    notice: chalk.blue.bold('[NOT]'),
-    timing: chalk.blue('[TIM]'),
-    verbose: chalk.blue.bold('[VRB]'),
-    debug: chalk.gray.bold('[DBG]'),
-    silly: chalk.white.bold('[LOL]'),
-    log: ''
-};
-
-const isWin = /^win/.test(process.platform);
-const asciiPrefixes = {
-    error: chalk.red.bold(isWin ? '►' : '✖'),
-    warn: chalk.yellow.bold(isWin ? '‼' : '⚠'),
-    warning: chalk.yellow.bold(isWin ? '‼' : '⚠'),
-    http: chalk.cyan.bold(isWin ? '≡' : '☷'),
-    info: chalk.green.bold(isWin ? 'i' : 'ℹ'),
-    notice: chalk.blue.bold(isWin ? 'i' : 'ℵ'),
-    timing: chalk.blue(isWin ? '+' : '◷'),
-    verbose: chalk.blue.bold(isWin ? 'i' : 'ℹ'),
-    debug: chalk.gray.bold(isWin ? 'i': 'ℹ'),
-    silly: chalk.white.bold(isWin ? '☺' : '☺'),
-    log: ''
-};
-
-const emojiPrefixes = {
-    error: '❌ ',
-    warn: '〽️ ',
-    warning: "〽️ ",
-    http: '🌐 ',
-    info: '➡️ ',
-    notice: '❕',
-    timing: '🕒 ',
-    verbose: '🎤 ',
-    debug: '🔬 ',
-    silly: '🙃 ',
-    log: ''
-};
-
 class Loog {
     constructor (config) { 
         this._indentation = 0;
@@ -130,20 +152,7 @@ class Loog {
                 if (!this.cfg.color) {
                     this.cfg.colorStyle = {};
                 } else {
-                    this.cfg.colorStyle = {
-                        error: chalk.red.bold,
-                        warn: chalk.yellow.bold,
-                        warning: chalk.yellow.bold,
-                        http: chalk.cyan.bold,
-                        info: chalk.green.bold,
-                        notice: chalk.blue.bold,
-                        timing: chalk.blue,
-                        verbose: chalk.blue.bold,
-                        debug: chalk.gray.bold,
-                        silly: chalk.white.bold,
-                        /** @private */
-                        log: t => t
-                    };
+                    this.cfg.colorStyle = colorStyles;
                 }
                 break;
         }
@@ -189,6 +198,7 @@ class Loog {
      */
     pauseIndentation () {
         this._indentWas = this._indentation;
+        this._indentation = 0;
     }
 
     /**
@@ -202,6 +212,7 @@ class Loog {
      */
     resumeIndentation () {
         this._indentation = this._indentWas;
+        delete this._indentWas;
     }
 
     /**
@@ -215,6 +226,7 @@ class Loog {
      */
     resetIndentation () {
         this._indentation = 0;
+        delete this._indentWas;
     }
 
     /**
@@ -489,4 +501,5 @@ const defaultCfg = {
     logLevel: process.env.npm_config_loglevel || 'info'
 };
 
+let _instance = new Loog(defaultCfg);
 module.exports = wrap();

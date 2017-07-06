@@ -1,4 +1,5 @@
 # loog
+[![Inline docs](http://inch-ci.org/github/israelroldan/loog.svg?branch=master)](http://inch-ci.org/github/israelroldan/loog)
 > 1 simple log, 1 extra letter
 
 `loog` provides a simple but very complete logger interface.
