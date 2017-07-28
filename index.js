@@ -160,6 +160,19 @@ class Loog {
     } 
 
     /**
+     * Clears the console
+     * @function
+     * @name module:loog#clear
+     * @returns {loog}
+     */
+    clear () {
+        if (!this._mute) {
+            process.stdout.write('\x1Bc');
+        }
+        return this;
+    }
+
+    /**
      * Indent subsequent log statements one level deeper.
      * @function
      * @name module:loog#indent

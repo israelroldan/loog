@@ -2,13 +2,25 @@ const Assert = require('assertly');
 const expect = Assert.expect;
 const sinon = require('sinon');
 
-describe('reflection-based tests', function () {
+describe('api', function () {
     beforeEach(function() {
         sinon.spy(console, 'log');
+        sinon.spy(process.stdout, 'write');
     });
 
     afterEach(function() {
         console.log.restore();
+        process.stdout.write.restore();
+    });
+
+    describe('clear', function () {
+        it('should provide a clear method', function () {
+            let loog = require('..')();
+            loog.log('hi');
+            loog.clear();
+            loog.log('bye');
+            expect(process.stdout.write.secondCall.args[0]).to.equal('\x1Bc');
+        })
     });
 
     describe('log methods', function () {
