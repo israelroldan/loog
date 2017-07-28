@@ -158,7 +158,9 @@ class Loog {
                 break;
         }
         this.setLogLevel(config.logLevel);
-    } 
+    }
+
+    /****** Instance methods ******/
 
     /**
      * Clears the console
@@ -171,6 +173,17 @@ class Loog {
             process.stdout.write('\x1Bc');
         }
         return this;
+    }
+
+    /**
+     * Clears a counter
+     * @function
+     * @name module:loog#clearCount
+     * @param {string} [message=''] - The message or label to clear the counter for
+     * @returns {loog}
+     */
+    clearCount (label) {
+        delete this._counters[label||'_'];
     }
 
     /**
@@ -209,17 +222,6 @@ class Loog {
     }
 
     /**
-     * Clears a counter
-     * @function
-     * @name module:loog#clearCount
-     * @param {string} [message=''] - The message or label to clear the counter for
-     * @returns {loog}
-     */
-    clearCount (label) {
-        delete this._counters[label||'_'];
-    }
-
-    /**
      * Indent subsequent log statements one level deeper.
      * @function
      * @name module:loog#indent
@@ -230,6 +232,18 @@ class Loog {
      */
     indent () {
         this._indentation++;
+        return this;
+    }
+
+    /**
+     * Mutes all subsequent log statements
+     * @function
+     * @name module:loog#mute
+     * @see {@link module:loog#unmute}
+     * @returns {loog}
+     */
+    mute () {
+        this._mute = true;
         return this;
     }
 
@@ -268,22 +282,6 @@ class Loog {
     }
 
     /**
-     * Resumes the previously paused indentation.
-     * @function
-     * @name module:loog#resumeIndentation
-     * @see {@link module:loog#pauseIndentation}
-     * @see {@link module:loog#indent}
-     * @see {@link module:loog#outdent}
-     * @see {@link module:loog#resetIndentation}
-     * @returns {loog}
-     */
-    resumeIndentation () {
-        this._indentation = this._indentWas;
-        delete this._indentWas;
-        return this;
-    }
-
-    /**
      * Resets the indent level to 0.
      * @function
      * @name module:loog#resetIndentation
@@ -300,26 +298,18 @@ class Loog {
     }
 
     /**
-     * Mutes all subsequent log statements
+     * Resumes the previously paused indentation.
      * @function
-     * @name module:loog#mute
-     * @see {@link module:loog#unmute}
+     * @name module:loog#resumeIndentation
+     * @see {@link module:loog#pauseIndentation}
+     * @see {@link module:loog#indent}
+     * @see {@link module:loog#outdent}
+     * @see {@link module:loog#resetIndentation}
      * @returns {loog}
      */
-    mute () {
-        this._mute = true;
-        return this;
-    }
-
-    /**
-     * Unmutes all subsequent log statements
-     * @function
-     * @name module:loog#unmute
-     * @see {@link module:loog#mute}
-     * @returns {loog}
-     */
-    unmute () {
-        this._mute = false;
+    resumeIndentation () {
+        this._indentation = this._indentWas;
+        delete this._indentWas;
         return this;
     }
 
@@ -448,6 +438,19 @@ class Loog {
         return this;
     }
 
+    /**
+     * Unmutes all subsequent log statements
+     * @function
+     * @name module:loog#unmute
+     * @see {@link module:loog#mute}
+     * @returns {loog}
+     */
+    unmute () {
+        this._mute = false;
+        return this;
+    }
+
+    /****** Private methods ******/
     
     /**
      * Logs `message` as **error**.
