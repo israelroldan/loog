@@ -136,6 +136,7 @@ function wrap () {
 class Loog {
     constructor (config) { 
         this._indentation = 0;
+        this._counters = {};
         this.cfg = Object.assign({}, config);
         switch (this.cfg.prefixStyle) {
             case "text":
@@ -183,6 +184,39 @@ class Loog {
             process.stdout.write('\u001B[A\u001B[K');
         }
         return this;
+    }
+
+    /**
+     * Count a given message or label and show a message (optional)
+     * @function
+     * @name module:loog#count
+     * @param {string} [message=''] - The message or label
+     * @param {string} [type=''] - The type of log to use, pass `null` to skip logging the current count
+     * @returns {loog}
+     */
+    count (label, type='log') {
+        let m = '';
+        if (label) {
+            m = `${label}: `;
+        } else {
+            label = '_';
+        }
+        this._counters[label] = (this._counters[label] || 0) + 1;
+        if (type!==null) {
+            this[type](`${m}${this._counters[label]}`);
+        }
+        return this;
+    }
+
+    /**
+     * Clears a counter
+     * @function
+     * @name module:loog#clearCount
+     * @param {string} [message=''] - The message or label to clear the counter for
+     * @returns {loog}
+     */
+    clearCount (label) {
+        delete this._counters[label||'_'];
     }
 
     /**

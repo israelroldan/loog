@@ -21,4 +21,8 @@ let showcase = (title, cfg) => {
         });
 }
 const console = require('.');
-console.error('Hi asdfasdfasdf asdfasdf asdf').clearLine().info('Test');
+console.count(null,null);
+console.count('foo', null);
+console.count();
+console.count('foo');
+console.count();
