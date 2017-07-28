@@ -21,8 +21,10 @@ let showcase = (title, cfg) => {
         });
 }
 const console = require('.');
-console.count(null,null);
-console.count('foo', null);
-console.count();
-console.count('foo');
-console.count();
+console.track('foo');
+console.track('foo');
+console.track('foo');
+console.track('bar');
+console.track('foo');
+console.track('bar');
+console.report();

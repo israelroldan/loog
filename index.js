@@ -137,6 +137,7 @@ class Loog {
     constructor (config) { 
         this._indentation = 0;
         this._counters = {};
+        this._trackers = {};
         this.cfg = Object.assign({}, config);
         switch (this.cfg.prefixStyle) {
             case "text":
@@ -163,9 +164,10 @@ class Loog {
     /****** Instance methods ******/
 
     /**
-     * Clears the console
+     * Clears the console, does nothing if muted
      * @function
      * @name module:loog#clear
+     * @see {@link module:loog#clearLine}
      * @returns {loog}
      */
     clear () {
@@ -180,6 +182,7 @@ class Loog {
      * @function
      * @name module:loog#clearCount
      * @param {string} [message=''] - The message or label to clear the counter for
+     * @see {@link module:loog#count}
      * @returns {loog}
      */
     clearCount (label) {
@@ -187,9 +190,10 @@ class Loog {
     }
 
     /**
-     * Clears the last line from the console
+     * Clears the last line from the console, does nothing if muted
      * @function
      * @name module:loog#clearLine
+     * @see {@link module:loog#clear}
      * @returns {loog}
      */
     clearLine () {
@@ -203,8 +207,9 @@ class Loog {
      * Count a given message or label and show a message (optional)
      * @function
      * @name module:loog#count
-     * @param {string} [message=''] - The message or label
-     * @param {string} [type=''] - The type of log to use, pass `null` to skip logging the current count
+     * @param {string} [message=null] - The message or label
+     * @param {string} [type=log] - The type of log to use, pass `null` to skip logging the current count
+     * @see {@link module:loog#clearCount}
      * @returns {loog}
      */
     count (label, type='log') {
@@ -278,6 +283,28 @@ class Loog {
     pauseIndentation () {
         this._indentWas = this._indentation;
         this._indentation = 0;
+        return this;
+    }
+
+    /**
+     * Reports existing trackers, does nothing if muted
+     * @function
+     * @name module:loog#report
+     * @see {@link module:loog#mute}
+     * @returns {loog}
+     */
+    report (label, type = 'log') {
+        let me = this;
+        if (label && label in this._trackers) {
+            me[type](`${label}: ${this._trackers[label]}`);
+        } else {
+            let msg = Object.keys(this._trackers).sort().map((k) => {
+                return `${k}: ${this._trackers[k]}`;
+            });
+            if (msg.length) {
+                me[type](msg.join(', '));
+            }
+        }
         return this;
     }
 
@@ -439,6 +466,22 @@ class Loog {
     }
 
     /**
+     * Tracks a label or message so that it can be later retrieved using `report`.
+     * @function
+     * @name module:loog#track
+     * @param {string} label - The label or message to track
+     * @see {@link module:loog#report}
+     * @see {@link module:loog#untrack}
+     * @returns {loog}
+     */
+    track (label) {
+        if (label) {
+            this._trackers[label] = (this._trackers[label] || 0) + 1;
+        }
+        return this;
+    }
+
+    /**
      * Unmutes all subsequent log statements
      * @function
      * @name module:loog#unmute
@@ -447,6 +490,21 @@ class Loog {
      */
     unmute () {
         this._mute = false;
+        return this;
+    }
+
+    /**
+     * Stops tracking a label
+     * @function
+     * @name module:loog#untrack
+     * @param {string} label - The label or message to stop tracking
+     * @see {@link module:loog#track}
+     * @returns {loog}
+     */
+    untrack (label) {
+        if (label && label in this._trackers) {
+            delete this._trackers[label];
+        }
         return this;
     }
 
