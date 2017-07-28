@@ -4,7 +4,7 @@
 
 `loog` provides a simple but very complete logger interface.
 
-![screenshot](https://github.com/israelroldan/loog/raw/master/screenshot.png)
+<img src="https://github.com/israelroldan/loog/raw/master/screenshot.png" style="max-width:800px;" >
 
 ## How to install
 
