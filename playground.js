@@ -1,5 +1,4 @@
 let boxen = require('boxen');
-let herb = require('herb');
 
 let loog;
 
@@ -21,13 +20,5 @@ let showcase = (title, cfg) => {
             loog[level](`loog.${level}`)
         });
 }
-
-loog = require('.');
-loog.log('log').indent().info('info').indent().warn('warn').outdent().error('error').outdent().log('bye');
-loog.clear();
-loog.log('hiya')
-loog.log('hi')
-loog.log('hi')
-loog.log('hi')
-loog.log('hi')
-loog.log('hi')
+const console = require('.');
+console.error('Hi asdfasdfasdf asdfasdf asdf').clearLine().info('Test');

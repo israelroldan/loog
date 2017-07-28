@@ -173,6 +173,19 @@ class Loog {
     }
 
     /**
+     * Clears the last line from the console
+     * @function
+     * @name module:loog#clearLine
+     * @returns {loog}
+     */
+    clearLine () {
+        if (!this._mute) {
+            process.stdout.write('\u001B[A\u001B[K');
+        }
+        return this;
+    }
+
+    /**
      * Indent subsequent log statements one level deeper.
      * @function
      * @name module:loog#indent

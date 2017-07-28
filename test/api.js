@@ -20,7 +20,14 @@ describe('api', function () {
             loog.clear();
             loog.log('bye');
             expect(process.stdout.write.secondCall.args[0]).to.equal('\x1Bc');
-        })
+        });
+        it('should provide a clearLine method', function () {
+            let loog = require('..')();
+            loog.log('hi');
+            loog.clearLine();
+            loog.log('bye');
+            expect(process.stdout.write.secondCall.args[0]).to.equal('\u001B[A\u001B[K');
+        });
     });
 
     describe('log methods', function () {
