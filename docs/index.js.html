@@ -205,9 +205,11 @@ class Loog {
      * @see {@link module:loog#outdent}
      * @see {@link module:loog#pauseIndentation}
      * @see {@link module:loog#resumeIndentation}
+     * @returns {loog}
      */
     indent () {
         this._indentation++;
+        return this;
     }
 
     /**
@@ -218,11 +220,13 @@ class Loog {
      * @see {@link module:loog#pauseIndentation}
      * @see {@link module:loog#resumeIndentation}
      * @see {@link module:loog#resetIndentation}
+     * @returns {loog}
      */
     outdent () {
         if (this._indentation > 0) {
             this._indentation--;
         }
+        return this;
     }
 
     /**
@@ -233,11 +237,13 @@ class Loog {
      * @see {@link module:loog#resumeIndentation}
      * @see {@link module:loog#indent}
      * @see {@link module:loog#outdent}
-     * @see {@link module:loog#resetIndentation} 
+     * @see {@link module:loog#resetIndentation}
+     * @returns {loog}
      */
     pauseIndentation () {
         this._indentWas = this._indentation;
         this._indentation = 0;
+        return this;
     }
 
     /**
@@ -248,10 +254,12 @@ class Loog {
      * @see {@link module:loog#indent}
      * @see {@link module:loog#outdent}
      * @see {@link module:loog#resetIndentation}
+     * @returns {loog}
      */
     resumeIndentation () {
         this._indentation = this._indentWas;
         delete this._indentWas;
+        return this;
     }
 
     /**
@@ -262,10 +270,12 @@ class Loog {
      * @see {@link module:loog#outdent}
      * @see {@link module:loog#pauseIndentation}
      * @see {@link module:loog#resumeIndentation}
+     * @returns {loog}
      */
     resetIndentation () {
         this._indentation = 0;
         delete this._indentWas;
+        return this;
     }
 
     /**
@@ -273,9 +283,11 @@ class Loog {
      * @function
      * @name module:loog#mute
      * @see {@link module:loog#unmute}
+     * @returns {loog}
      */
     mute () {
         this._mute = true;
+        return this;
     }
 
     /**
@@ -283,9 +295,11 @@ class Loog {
      * @function
      * @name module:loog#unmute
      * @see {@link module:loog#mute}
+     * @returns {loog}
      */
     unmute () {
         this._mute = false;
+        return this;
     }
 
     /**
@@ -375,6 +389,7 @@ class Loog {
      * @function
      * @name module:loog#setLogLevel
      * @param {string} [newLevel=quiet] - The log level to set, must be one of &lt;br> - all&lt;br> - silly&lt;br> - debug&lt;br> - verbose&lt;br> - timing&lt;br> - http&lt;br> - notice&lt;br> - info&lt;br> - warn&lt;br> - quiet&lt;br> - error&lt;br> - silent
+     * @returns {loog}
      */
     setLogLevel(newLevel) {
         let me = this;
@@ -409,6 +424,7 @@ class Loog {
                 me.mute();
                 break;
         }
+        return this;
     }
 
     
@@ -420,6 +436,7 @@ class Loog {
      * @function
      * @name module:loog#error
      * @param {string} message - The message to log
+     * @returns {loog}
      */
     /**
      * Logs `message` as **warn**.
@@ -430,6 +447,7 @@ class Loog {
      * @name module:loog#warn
      * @alias module:loog#warning
      * @param {string} message - The message to log
+     * @returns {loog}
      */    
     /**
      * Logs `message` as **info**.
@@ -439,6 +457,7 @@ class Loog {
      * @function
      * @name module:loog#info
      * @param {string} message - The message to log
+     * @returns {loog}
      */    
     /**
      * Logs `message` as **notice**.
@@ -448,6 +467,7 @@ class Loog {
      * @function
      * @name module:loog#notice
      * @param {string} message - The message to log
+     * @returns {loog}
      */    
     /**
      * Logs `message` as **http**.
@@ -457,6 +477,7 @@ class Loog {
      * @function
      * @name module:loog#http
      * @param {string} message - The message to log
+     * @returns {loog}
      */    
     /**
      * Logs `message` as **timing**.
@@ -466,6 +487,7 @@ class Loog {
      * @function
      * @name module:loog#timing
      * @param {string} message - The message to log
+     * @returns {loog}
      */    
     /**
      * Logs `message` as **verbose**.
@@ -475,6 +497,7 @@ class Loog {
      * @function
      * @name module:loog#verbose
      * @param {string} message - The message to log
+     * @returns {loog}
      */    
     /**
      * Logs `message` as **debug**.
@@ -484,6 +507,7 @@ class Loog {
      * @function
      * @name module:loog#debug
      * @param {string} message - The message to log
+     * @returns {loog}
      */    
     /**
      * Logs `message` as **silly**.
@@ -493,12 +517,14 @@ class Loog {
      * @function
      * @name module:loog#silly
      * @param {string} message - The message to log
+     * @returns {loog}
      */    
     /**
      * Issues a log statement marked as 'log'
      * @function
      * @name module:loog#log
      * @param {string} message - The message to log
+     * @returns {loog}
      */ 
     _getLogFn(level) {
         let me = this;
@@ -517,6 +543,7 @@ class Loog {
                     console.log(args.join(' '));
                 }
             }
+            return me;
         }
     }
 }
@@ -553,7 +580,7 @@ module.exports = wrap();</code></pre>
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a> on Thu Jul 06 2017 14:01:13 GMT+0200 (CEST) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a> on Fri Jul 28 2017 14:42:43 GMT+0200 (CEST) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
 </footer>
 
 <script>prettyPrint();</script>

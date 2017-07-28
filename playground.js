@@ -21,8 +21,5 @@ let showcase = (title, cfg) => {
         });
 }
 
-showcase('Default log level (info)', {});
-
-showcase("Custom log level\n\n    let loog = require('loog')({  \n        logLevel: 'debug'\n    });", {logLevel: 'debug'});
-
-showcase("Adjust log level at runtime\n\n    loog.setLogLevel('quiet');",{logLevel: 'quiet'});
+loog = require('.');
+loog.log('log').indent().info('info').indent().warn('warn').outdent().error('error').outdent().log('bye');
