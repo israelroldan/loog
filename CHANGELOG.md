@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="1.6.0"></a>
+# [1.6.0](https://github.com/palulabs/loog/compare/v1.5.1...v1.6.0) (2017-07-29)
+
+
+### Features
+
+* **Chaining:** Add support for chained method calls ([74a84fe](https://github.com/palulabs/loog/commit/74a84fe))
+* **Clear:** Add new `clear` method ([71083fb](https://github.com/palulabs/loog/commit/71083fb))
+* **clearLine:** Add clearLine method ([05cdffb](https://github.com/palulabs/loog/commit/05cdffb))
+* **Count:** Added count / clearCount methods ([f36458e](https://github.com/palulabs/loog/commit/f36458e))
+* **Prefixes:** Allow custom prefixes and process prefix ([4888a4a](https://github.com/palulabs/loog/commit/4888a4a))
+* **Track:** Add track / untrack / report methods ([cdd0f3c](https://github.com/palulabs/loog/commit/cdd0f3c))
+
+
+
 <a name="1.5.1"></a>
 ## [1.5.1](https://github.com/palulabs/loog/compare/v1.5.0...v1.5.1) (2017-07-06)
 
