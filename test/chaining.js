@@ -23,6 +23,6 @@ describe('chaining', function () {
             .outdent()
             .log('bye');
         expect(console.log.callCount).to.equal(5);
-        expect(console.log.thirdCall.args[0]).to.equal(`   ${loog.$prefixes.text.warn} warn`);
+        expect(console.log.thirdCall.args[0]).to.equal(`   ${loog.$colors.warn(loog.$prefixes.text.warn)} warn`);
     });
 });

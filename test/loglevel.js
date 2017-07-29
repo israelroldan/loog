@@ -18,7 +18,7 @@ describe('log level', function () {
         loog.setLogLevel('debug');
         loog.debug('I should be visible');
         expect(console.log.called).to.be.truthy();
-        expect(console.log.firstCall.args[0]).to.equal(`${loog.$prefixes.text.debug} I should be visible`);
+        expect(console.log.firstCall.args[0]).to.equal(`${loog.$colors.debug(loog.$prefixes.text.debug)} I should be visible`);
     });
 
     it('should not fail if an empty log level is passed', function () {
@@ -29,17 +29,17 @@ describe('log level', function () {
         expect(console.log.firstCall.args[0]).to.equal(`Hi`);
     });
 
-    it('The default log level should be info', function () {
+    it('should assume info as default level', function () {
         let loog = require('..')();
         loog.debug('I should not be visible!');
         expect(console.log.called).to.not.be.truthy();
         loog.setLogLevel();
         loog.info('Hi');
         expect(console.log.called).to.be.truthy();
-        expect(console.log.firstCall.args[0]).to.equal(`${loog.$prefixes.text.info} Hi`);
+        expect(console.log.firstCall.args[0]).to.equal(`${loog.$colors.info(loog.$prefixes.text.info)} Hi`);
     });
 
-    it('Should provide a log level to mute everything', function () {
+    it('should provide a log level to mute everything', function () {
         let loog = require('..')();
         loog.setLogLevel('silent');
         loog.error('I should not be visible!');

@@ -17,40 +17,40 @@ const logLevels = [
 ];
 
 const textPrefixes = {
-    error: chalk.red.bold('[ERR]'),
-    warn: chalk.yellow.bold('[WRN]'),
-    warning: chalk.yellow.bold('[WRN]'),
-    http: chalk.cyan.bold('[NET]'),
-    info: chalk.green.bold('[INF]'),
-    notice: chalk.blue.bold('[NOT]'),
-    timing: chalk.blue('[TIM]'),
-    verbose: chalk.blue.bold('[VRB]'),
-    debug: chalk.gray.bold('[DBG]'),
-    silly: chalk.white.bold('[LOL]'),
+    error: '[ERR]',
+    warn: '[WRN]',
+    warning: '[WRN]',
+    http: '[NET]',
+    info: '[INF]',
+    notice: '[NOT]',
+    timing: '[TIM]',
+    verbose: '[VRB]',
+    debug: '[DBG]',
+    silly: '[LOL]',
     log: ''
 };
 
 const asciiPrefixes = {
-    error: chalk.red.bold(isWin ? '►' : '✖'),
-    warn: chalk.yellow.bold(isWin ? '‼' : '⚠'),
-    warning: chalk.yellow.bold(isWin ? '‼' : '⚠'),
-    http: chalk.cyan.bold(isWin ? '≡' : '☷'),
-    info: chalk.green.bold(isWin ? 'i' : 'ℹ'),
-    notice: chalk.blue.bold(isWin ? 'i' : 'ℵ'),
-    timing: chalk.blue(isWin ? '+' : '◷'),
-    verbose: chalk.blue.bold(isWin ? 'i' : 'ℹ'),
-    debug: chalk.gray.bold(isWin ? 'i': 'ℹ'),
-    silly: chalk.white.bold(isWin ? '☺' : '☺'),
+    error: isWin ? '►' : '✖',
+    warn: isWin ? '‼' : '⚠',
+    warning: isWin ? '‼' : '⚠',
+    http: isWin ? '≡' : '☷',
+    info: isWin ? 'i' : 'ℹ',
+    notice: isWin ? 'i' : 'ℵ',
+    timing: isWin ? '+' : '◷',
+    verbose: isWin ? 'i' : 'ℹ',
+    debug: isWin ? 'i': 'ℹ',
+    silly: isWin ? '☺' : '☺',
     log: ''
 };
 
 const emojiPrefixes = {
     error: '❌ ',
-    warn: '〽️ ',
-    warning: "〽️ ",
+    warn: '〽️',
+    warning: '〽️',
     http: '🌐 ',
     info: '➡️ ',
-    notice: '❕',
+    notice: '❕ ',
     timing: '🕒 ',
     verbose: '🎤 ',
     debug: '🔬 ',
@@ -104,7 +104,7 @@ function wrap () {
         }
     });
     ex.$levels = logLevels;
-    ex.$methods = logLevels.filter(l => !~['all','quiet','silent'].indexOf(l));
+    ex.$methods = logLevels.filter(l => !~['all','quiet','silent'].indexOf(l)).concat(['log']);
     ex.$prefixes = {
         text: textPrefixes,
         ascii: asciiPrefixes,
@@ -139,24 +139,29 @@ class Loog {
         this._counters = {};
         this._trackers = {};
         this.cfg = Object.assign({}, config);
-        switch (this.cfg.prefixStyle) {
-            case "text":
-                this.cfg.prefixes = textPrefixes;
+        if (!('prefixes' in this.cfg)) {
+            switch (this.cfg.prefixStyle) {
+                case "text":
+                    this.cfg.prefixes = textPrefixes;
+                    break;
+                case "emoji":
+                    this.cfg.prefixes = emojiPrefixes;
+                    break;
+                case "ascii":
+                    this.cfg.prefixes = asciiPrefixes;
+                    break;
+                default:
+                    this.cfg.prefixes = {};
+                    this.cfg._noPrefix = true;
                 break;
-            case "emoji":
-                this.cfg.prefixes = emojiPrefixes;
-                break;
-            case "ascii":
-                this.cfg.prefixes = asciiPrefixes;
-                break;
-            case "none":
-                this.cfg.prefixes = {};
-                if (!this.cfg.color) {
-                    this.cfg.colorStyle = {};
-                } else {
-                    this.cfg.colorStyle = colorStyles;
-                }
-                break;
+            }
+        } else if (Object.keys(this.cfg.prefixes).length == 0) {
+            this.cfg._noPrefix = true;
+        }
+        if (!('colors' in this.cfg)) {
+            this.cfg.colors = colorStyles;
+        } else if (Object.keys(this.cfg.colors).length == 0) {
+            this.cfg._noColors = true;
         }
         this.setLogLevel(config.logLevel);
     }
@@ -614,13 +619,24 @@ class Loog {
             if (logFn.enable && !me._mute) {
                 let args = Array.prototype.slice.call(arguments);
                 if (me.cfg.prefixes[level]) {
-                    args.unshift(me.cfg.prefixes[level]);
+                    if (me.cfg._noColors) {
+                        args.unshift(me.cfg.prefixes[level]);
+                    } else {
+                        args.unshift(me.cfg.colors[level](me.cfg.prefixes[level]));
+                    }
                 }
                 if (this._indentation > 0) {
                     args.unshift(" ".repeat(this._indentation));
                 }
-                if (me.cfg.colorStyle[level]) {
-                    console.log(me.cfg.colorStyle[level](args.join(' ')));
+                if (this.cfg.process) {
+                    args.unshift(this.cfg.process);
+                }
+                if (me.cfg._noPrefix) {
+                    if (me.cfg._noColors) {
+                        console.log(args.join(' '));
+                    } else {
+                        console.log(me.cfg.colors[level](args.join(' ')));
+                    }
                 } else {
                     console.log(args.join(' '));
                 }
@@ -644,8 +660,6 @@ Object.keys(textPrefixes).forEach(level => {
 
 const defaultCfg = {
     prefixStyle: 'text',
-    color: true,
-    colorStyle: {},
     logLevel: process.env.npm_config_loglevel || 'info'
 };
 

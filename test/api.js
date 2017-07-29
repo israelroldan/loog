@@ -33,59 +33,36 @@ describe('api', function () {
     describe('log methods', function () {
         let loog = require('..')();
         loog.setLogLevel('all');
-        let msg = 'Hi';    
+        let msg = 'Hi, ';    
         loog.$methods.forEach(m => {
             it(`should provide a '${m}' method`, function () {
-                loog[m](msg);
-                expect(console.log.firstCall.args[0]).to.equal(`${loog.$prefixes.text[m]} Hi`);
+                loog[m](`${msg}${m}`);
+                expect(console.log.firstCall.args[0]).to.equal(`${loog.$colors[m](loog.$prefixes.text[m])}${(m !== 'log') ? " " : ""}Hi, ${m}`);
             });
         });
     });
 
-    describe('prefixes', function () {
-        let loog = require('..')();
-        let msg = 'Hi';    
-        describe('text', function () {
-            it('should have \'text\' as default prefix style', function () {
-                loog.info(msg);
-                expect(console.log.calledWith(`${loog.$prefixes.text.info} ${msg}`)).to.be.truthy();
-            });
+    describe('process name', function () {
+        let loog = require('..')({
+            process: 'foo'
         });
-        describe('ascii', function () {
-            it('should have \'ascii\' as possible prefix style', function () {
-                loog = loog({
-                    prefixStyle: 'ascii'
-                })
-                loog.info(msg);
-                expect(console.log.calledWith(`${loog.$prefixes.ascii.info} ${msg}`)).to.be.truthy();
-            });
+        it(`should optionally display a process name before the prefixes`, function () {
+            loog.info('Hi');
+            expect(console.log.firstCall.args[0]).to.equal(`foo ${loog.$colors.info(loog.$prefixes.text.info)} Hi`);
         });
-        describe('emoji', function () {
-            it('should have \'emoji\' as possible prefix style', function () {
-                loog = loog({
-                    prefixStyle: 'emoji'
-                })
-                loog.info(msg);
-                expect(console.log.calledWith(`${loog.$prefixes.emoji.info} ${msg}`)).to.be.truthy();
-            });
+        it(`should not be afected by indentation`, function () {
+            loog.indent().indent();
+            loog.info('Hi');
+            loog.resetIndentation();
+            expect(console.log.firstCall.args[0]).to.equal(`foo    ${loog.$colors.info(loog.$prefixes.text.info)} Hi`);
         });
-        describe('none', function () {
-            it('should provide a way to skip having prefixes, but show colors', function () {
-                loog = loog({
-                    prefixStyle: 'none'
-                })
-                loog.info(msg);
-                expect(console.log.calledWith(loog.$colors.info(msg))).to.be.truthy();
-                loog.log(msg);
-            });
-            it('should provide a way to skip having prefixes, without colors', function () {
-                loog = loog({
-                    prefixStyle: 'none',
-                    color: false
-                })
-                loog.info(msg);
-                expect(console.log.calledWith(msg)).to.be.truthy();
-            });
-        })
-    });
+        it(`should apply to utility methods as well`, function () {
+            loog.count('hi');
+            expect(console.log.firstCall.args[0]).to.equal(`foo hi: 1`);
+            loog.track('foo');
+            loog.track('bar');
+            loog.report();
+            expect(console.log.secondCall.args[0]).to.equal(`foo bar: 1, foo: 1`);
+        });
+    })
 });

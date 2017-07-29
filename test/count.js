@@ -51,6 +51,6 @@ describe('count', function () {
     it('should allow specifying a custom log type', function () {
         let loog = require('..')();
         loog.count('foo', 'warn');
-        expect(console.log.firstCall.args[0]).to.equal(`${loog.$prefixes.text.warn} foo: 1`);
+        expect(console.log.firstCall.args[0]).to.equal(`${loog.$colors.warn(loog.$prefixes.text.warn)} foo: 1`);
     });
 });

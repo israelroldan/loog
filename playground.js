@@ -8,23 +8,24 @@ let header = (text) => {
 let showcase = (title, cfg) => {
     loog = loog ? loog(cfg) : require('.')(cfg);
     header(title);
-    [ 'error',
-        'warn',
-        'warning',
-        'http',
-        'info',
-        'verbose',
-        'debug',
-        'silly',
-        'log' ].forEach(level => {
-            loog[level](`loog.${level}`)
-        });
+    loog.$methods.forEach(level => {
+        loog[level](`loog.${level}`)
+    });
 }
-const console = require('.');
-console.track('foo');
-console.track('foo');
-console.track('foo');
-console.track('bar');
-console.track('foo');
-console.track('bar');
-console.report();
+
+showcase('npm copycat', {
+    process: 'awesomify',
+    prefixes: {
+        error: 'ERR',
+        warn: 'WRN',
+        warning: 'WRN',
+        http: 'NET',
+        info: 'INF',
+        notice: 'NOT',
+        timing: 'TIM',
+        verbose: 'VRB',
+        debug: 'DBG',
+        silly: 'LOL',
+        log: '>'
+    }
+})
