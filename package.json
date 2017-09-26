@@ -38,7 +38,7 @@
     "minami": "^1.2.3",
     "mocha": "^3.4.2",
     "nyc": "^11.0.3",
-    "sinon": "^3.2.0",
+    "sinon": "^4.0.0",
     "standard-version": "^4.0.0"
   },
   "config": {
