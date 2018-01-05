@@ -23,6 +23,10 @@ let showcase = (title, cfg) => {
 
 showcase("Default settings (text mode)\n\n    let loog = require('loog');  ",{});
 
+showcase("npm mode\n\n    let loog = require('loog')({  \n        prefixStyle: 'npm'\n    });", {
+    prefixStyle: 'npm'
+});
+
 showcase("Emoji mode\n\n    let loog = require('loog')({  \n        prefixStyle: 'emoji'\n    });", {
     prefixStyle: 'emoji'
 });
@@ -87,6 +91,7 @@ require('.')
     .track('Apple')
     .report('Orange');
 
-showcase("Process name prefix\n\n    let loog = require('loog')({  \n        process: 'npm'\n    });", {
-    process: 'npm'
+showcase("Process name prefix (à-la npm)\n\n    let loog = require('loog')({  \n        process: 'npm'\n        prefixStyle: 'npm' // optional\n    });", {
+    process: 'npm',
+    prefixStyle: 'npm'
 });

@@ -52,6 +52,16 @@ describe('prefixes', function () {
     });
   });
 
+  describe('npm', function () {
+    it('should have \'npm\' as possible prefix style', function () {
+      loog = loog({
+        prefixStyle: 'npm'
+      })
+      loog.info(msg);
+      expect(console.log.firstCall.args[0]).to.equal(`${loog.$colors.info(loog.$prefixes.npm.info)} ${msg}`);
+    });
+  });
+
   describe('custom', function () {
     it('should allow specifying custom prefixes', function () {
       loog = loog({

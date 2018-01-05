@@ -73,6 +73,21 @@ const colorStyles = {
     log: t => t
 };
 
+const npmPrefixes = {
+    error: 'ERR',
+    warn: 'WRN',
+    warning: 'WRN',
+    http: 'NET',
+    info: 'INF',
+    success: 'OK ',
+    notice: 'NOT',
+    timing: 'TIM',
+    verbose: 'VRB',
+    debug: 'DBG',
+    silly: 'LOL',
+    log: '>'
+};
+
 /**
  * This function serves as the loog object and a function to reconfigure it.
  * A quick example:
@@ -108,7 +123,8 @@ function wrap () {
     ex.$prefixes = {
         text: textPrefixes,
         ascii: asciiPrefixes,
-        emoji: emojiPrefixes
+        emoji: emojiPrefixes,
+        npm: npmPrefixes
     };
     ex.$colors = colorStyles;
     return ex;
@@ -149,6 +165,9 @@ class Loog {
                     break;
                 case "ascii":
                     this.cfg.prefixes = asciiPrefixes;
+                    break;
+                case "npm":
+                    this.cfg.prefixes = npmPrefixes;
                     break;
                 default:
                     this.cfg.prefixes = {};

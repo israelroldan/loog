@@ -14,18 +14,6 @@ let showcase = (title, cfg) => {
 }
 
 showcase('npm copycat', {
-    process: 'awesomify',
-    prefixes: {
-        error: 'ERR',
-        warn: 'WRN',
-        warning: 'WRN',
-        http: 'NET',
-        info: 'INF',
-        notice: 'NOT',
-        timing: 'TIM',
-        verbose: 'VRB',
-        debug: 'DBG',
-        silly: 'LOL',
-        log: '>'
-    }
+    process: 'npm',
+    prefixStyle: 'npm'
 })
