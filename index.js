@@ -10,6 +10,7 @@ const logLevels = [
     'http',
     'notice',
     'info',
+    'success',
     'warn',
     'quiet',
     'error',
@@ -22,6 +23,7 @@ const textPrefixes = {
     warning: '[WRN]',
     http: '[NET]',
     info: '[INF]',
+    success: '[OK ]',
     notice: '[NOT]',
     timing: '[TIM]',
     verbose: '[VRB]',
@@ -36,6 +38,7 @@ const asciiPrefixes = {
     warning: isWin ? '‼' : '⚠',
     http: isWin ? '≡' : '☷',
     info: isWin ? 'i' : 'ℹ',
+    success: isWin ? '√' : '✔',
     notice: isWin ? 'i' : 'ℵ',
     timing: isWin ? '+' : '◷',
     verbose: isWin ? 'i' : 'ℹ',
@@ -50,6 +53,7 @@ const emojiPrefixes = {
     warning: '〽️',
     http: '🌐 ',
     info: '➡️ ',
+    success: '✅ ',
     notice: '❕ ',
     timing: '🕒 ',
     verbose: '🎤 ',
@@ -64,6 +68,7 @@ const colorStyles = {
     warning: chalk.yellow.bold,
     http: chalk.cyan.bold,
     info: chalk.green.bold,
+    success: chalk.green.bold,
     notice: chalk.blue.bold,
     timing: chalk.blue,
     verbose: chalk.blue.bold,
@@ -377,6 +382,7 @@ class Loog {
      *  - http
      *  - notice
      *  - info
+     *  - success
      *  - warn
      *  - quiet
      *  - error
@@ -389,6 +395,7 @@ class Loog {
      *    - `loog.warn`
      *    - `loog.warning`
      *    - `loog.info`
+     *    - `loog.success`
      *    - `loog.notice`
      *    - `loog.http`
      *    - `loog.timing`
@@ -401,6 +408,7 @@ class Loog {
      *    - `loog.warn`
      *    - `loog.warning`
      *    - `loog.info`
+     *    - `loog.success`
      *    - `loog.notice`
      *    - `loog.http`
      *    - `loog.timing`
@@ -412,6 +420,7 @@ class Loog {
      *    - `loog.warn`
      *    - `loog.warning`
      *    - `loog.info`
+     *    - `loog.success`
      *    - `loog.notice`
      *    - `loog.http`
      *    - `loog.timing`
@@ -421,6 +430,7 @@ class Loog {
      *    - `loog.warn`
      *    - `loog.warning`
      *    - `loog.info`
+     *    - `loog.success`
      *    - `loog.notice`
      *    - `loog.http`
      *    - `loog.log`
@@ -429,6 +439,7 @@ class Loog {
      *    - `loog.warn`
      *    - `loog.warning`
      *    - `loog.info`
+     *    - `loog.success`
      *    - `loog.notice`
      *    - `loog.log`
      *  - Level: **info**
@@ -436,6 +447,7 @@ class Loog {
      *    - `loog.warn`
      *    - `loog.warning`
      *    - `loog.info`
+     *    - `loog.success`
      *    - `loog.log`
      *  - Level: **warn**
      *    - `loog.error`
@@ -474,6 +486,7 @@ class Loog {
                 me.notice.enable = true;
             case "info":
                 me.info.enable = true;
+                me.success.enable = true;
             case "warn":
                 me.warn.enable = true;
                 me.warning.enable = true;
@@ -564,7 +577,17 @@ class Loog {
      * @name module:loog#info
      * @param {string} message - The message to log
      * @returns {loog}
-     */    
+     */
+    /**
+     * Logs `message` as **success**.
+     * 
+     * Visible when `logLevel` is set to: `all`, `silly`, `debug`, `verbose`, `timing`, `http`, `notice` or `info`
+     * 
+     * @function
+     * @name module:loog#success
+     * @param {string} message - The message to log
+     * @returns {loog}
+     */        
     /**
      * Logs `message` as **notice**.
      * 
