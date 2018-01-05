@@ -107,18 +107,17 @@ const npmPrefixes = {
  *      });
  *      loog.info('Hi!');
  * 
- * @function
- * @name loog
+ * @function loog
  * @param {Object} [config] - The initial config
  * @param {string} [config.prefixStyle=text] - The prefix style, one of ['text', 'emoji', 'ascii', 'none']. 
  * @param {string} [config.logLevel=info] - The log level, one of ['silly', 'debug', 'info', 'warn', 'error', 'silent'].    
  */
 function wrap () {
-    let ex = function reconfigure (cfg) {
-        _instance = new Loog(Object.assign({}, defaultCfg, cfg));
+    let ex = function Loog (cfg) {
+        _instance = new Log(Object.assign({}, defaultCfg, cfg));
         return wrap();
     }
-    Object.getOwnPropertyNames(Loog.prototype).forEach((method)=> {
+    Object.getOwnPropertyNames(Log.prototype).forEach((method)=> {
         if (method !== "constructor" && method.charAt(0) !== "_") {
             ex[method] = _instance[method].bind(_instance);
         }
@@ -133,6 +132,37 @@ function wrap () {
     };
     ex.$colors = colorStyles;
     return ex;
+}
+
+function getLogFn(me, level) {
+    return function _ () {
+        if (_.enable && !me._mute) {
+            let args = Array.prototype.slice.call(arguments);
+            if (me.cfg.prefixes[level]) {
+                if (me.cfg._noColors) {
+                    args.unshift(me.cfg.prefixes[level]);
+                } else {
+                    args.unshift(me.cfg.colors[level](me.cfg.prefixes[level]));
+                }
+            }
+            if (me._indentation > 0) {
+                args.unshift(" ".repeat(me._indentation));
+            }
+            if (me.cfg.process) {
+                args.unshift(me.cfg.process);
+            }
+            if (me.cfg._noPrefix) {
+                if (me.cfg._noColors) {
+                    console.log(args.join(' '));
+                } else {
+                    console.log(me.cfg.colors[level](args.join(' ')));
+                }
+            } else {
+                console.log(args.join(' '));
+            }
+        }
+        return me;
+    }
 }
 
 /**
@@ -154,7 +184,7 @@ function wrap () {
  * See the docs for the global {@link loog} function for more documentation on how to reconfigure loog.
  * @module loog
  */
-class Loog {
+class Log {
     constructor (config) { 
         this._indentation = 0;
         this._counters = {};
@@ -654,46 +684,16 @@ class Loog {
      * @name module:loog#log
      * @param {string} message - The message to log
      * @returns {loog}
-     */ 
-    _getLogFn(level) {
-        let me = this;
-        return function logFn () {
-            if (logFn.enable && !me._mute) {
-                let args = Array.prototype.slice.call(arguments);
-                if (me.cfg.prefixes[level]) {
-                    if (me.cfg._noColors) {
-                        args.unshift(me.cfg.prefixes[level]);
-                    } else {
-                        args.unshift(me.cfg.colors[level](me.cfg.prefixes[level]));
-                    }
-                }
-                if (this._indentation > 0) {
-                    args.unshift(" ".repeat(this._indentation));
-                }
-                if (this.cfg.process) {
-                    args.unshift(this.cfg.process);
-                }
-                if (me.cfg._noPrefix) {
-                    if (me.cfg._noColors) {
-                        console.log(args.join(' '));
-                    } else {
-                        console.log(me.cfg.colors[level](args.join(' ')));
-                    }
-                } else {
-                    console.log(args.join(' '));
-                }
-            }
-            return me;
-        }
-    }
+     */
+    _ () {} // This is mock function helps the docs above to be included
 }
 
 Object.keys(textPrefixes).forEach(level => {
-    Object.defineProperty(Loog.prototype, level, {
+    Object.defineProperty(Log.prototype, level, {
         /** @private */
         get: function () { 
             if (!this[`_${level}`]) {
-                this[`_${level}`] = this._getLogFn(level);
+                this[`_${level}`] = getLogFn(this, level);
             }
             return this[`_${level}`];
         }
@@ -705,5 +705,5 @@ const defaultCfg = {
     logLevel: process.env.npm_config_loglevel || 'info'
 };
 
-let _instance = new Loog(defaultCfg);
+let _instance = new Log(defaultCfg);
 module.exports = wrap();
