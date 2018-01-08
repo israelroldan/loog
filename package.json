@@ -1,6 +1,6 @@
 {
   "name": "loog",
-  "version": "1.7.0",
+  "version": "1.8.0",
   "description": "Just what the world needs: Another logging library for Node.js",
   "main": "index.js",
   "scripts": {

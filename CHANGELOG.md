@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="1.8.0"></a>
+# [1.8.0](https://github.com/palulabs/loog/compare/v1.7.0...v1.8.0) (2018-01-08)
+
+
+### Features
+
+* **Log methods:** Add `json` method to log a JSON object ([c6a11ae](https://github.com/palulabs/loog/commit/c6a11ae))
+
+
+
 <a name="1.7.0"></a>
 # [1.7.0](https://github.com/palulabs/loog/compare/v1.6.0...v1.7.0) (2018-01-05)
 
