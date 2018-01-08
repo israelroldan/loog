@@ -30,6 +30,37 @@ describe('api', function () {
         });
     });
 
+    describe('json', function () {
+        it('should provide a json method to pretty print an object', function () {
+            let loog = require('..')();
+            expect(loog.json).to.be.truthy();
+        });
+        it('should log each line using separate calls', function () {
+            let loog = require('..')();
+            loog.json({foo: 'bar'});
+            expect(process.stdout.write.firstCall.args[0]).to.equal('{\n');
+            expect(process.stdout.write.secondCall.args[0]).to.equal('    "foo": "bar"\n');
+            expect(process.stdout.write.thirdCall.args[0]).to.equal('}\n');
+        });
+        it('should provide a way to configure the indentation desired', function () {
+            let loog = require('..')();
+            loog.json({foo: 'bar'}, 2);
+            expect(process.stdout.write.firstCall.args[0]).to.equal('{\n');
+            expect(process.stdout.write.secondCall.args[0]).to.equal('  "foo": "bar"\n');
+            expect(process.stdout.write.thirdCall.args[0]).to.equal('}\n');
+        });
+        it('should provide a way to configure the log function to use', function () {
+            let loog = require('..')({
+                colors: false,
+                prefixStyle: 'ascii'
+            });
+            loog.json({foo: 'bar'}, 1, 'info');
+            expect(process.stdout.write.firstCall.args[0]).to.equal('ℹ {\n');
+            expect(process.stdout.write.secondCall.args[0]).to.equal('ℹ  "foo": "bar"\n');
+            expect(process.stdout.write.thirdCall.args[0]).to.equal('ℹ }\n');
+        });
+    });
+
     describe('log methods', function () {
         let loog = require('..')();
         loog.setLogLevel('all');
