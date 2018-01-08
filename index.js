@@ -300,6 +300,18 @@ class Log {
     }
 
     /**
+     * Logs a JSON object using JSON.stringify
+     * @function
+     * @name module:loog$json
+     * @param {Object} json - The JSON object to log
+     * @param {number} [indent=4] - The number of spaces on each indent level
+     * @param {string} [type=log] - The logging method to use
+     */
+    json (json, indent = 4, type='log') {
+        JSON.stringify(json, null, indent).split('\n').map(l => {this[type](l)});
+    }
+
+    /**
      * Mutes all subsequent log statements
      * @function
      * @name module:loog#mute
