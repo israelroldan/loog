@@ -26,7 +26,7 @@
   },
   "homepage": "https://github.com/palulabs/loog#readme",
   "dependencies": {
-    "chalk": "^2.0.1"
+    "chalk": "^4.0.0"
   },
   "devDependencies": {
     "assertly": "^1.0.2",
